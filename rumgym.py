@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import Axes3D, proj3d
 import numpy as np
+
 class Point():
     '''
     This class is a point with x,y,z coordinates.
@@ -17,6 +18,7 @@ class Point():
     Methods:
     __init__(x,y,z) -- Constructor that sets all variables to the given parameters or 0.
     '''
+
     def __init__(self, x: float = 0, y: float = 0, z: float = 0):
         '''
         Constructor that sets all variables to the given parameters or 0.
@@ -41,6 +43,7 @@ class Vector(Point):
     dot(v1, v2) -- Calculates the dot product of two vectors.
     cross(v1, v2) -- Returns the cross product of two vectors.
     '''
+
     def __init__(self, x: float = 0, y: float = 0, z: float = 0):
         '''
         Constructor that sets all variables to the given parameters or 0.
@@ -134,6 +137,7 @@ class Line():
     __init__(p, d) -- Sets the variables to the provided parameters.
     len() -- Calculates the length of the line.
     '''
+
     def __init__(self, p: Point = Point(), d: Vector = Vector()):
         '''
         Sets the variables to the provided parameters.
@@ -143,8 +147,6 @@ class Line():
             self.d = d
         elif isinstance(d, Point):
             self.twoPoints(p, d)
-
-        
 
     def len(self) -> float:
         '''
@@ -174,8 +176,8 @@ class Plane():
     Methods:
     __init__(p, d1, d2) -- Sets the variables to the provided parameters.
     normVec() -- Returns the normal vector to the plane.
-    angle() -- Returns the angle between the plane and a vector.
     '''
+
     def __init__(self, p: Point = Point(), d1: Vector = Vector(), d2: Vector = Vector()):
         '''
         Sets the variables to the provided parameters.
@@ -187,8 +189,7 @@ class Plane():
         elif isinstance(p, Point) and isinstance(d1, Point) and isinstance(d2, Point):
             self.threePoints(p, d1, d2)
         elif isinstance(p, Vector) and isinstance(d1, Point) and isinstance(d2, Point):
-            self.vecTwoPoints(p, d1, d2)
-        
+            self.vecTwoPoints(p, d1, d2)   
 
     def normVec(self) -> Vector:
         '''
@@ -199,12 +200,6 @@ class Plane():
 
         return nv
 
-    def angle(self, v: Vector) -> float:
-        '''
-        Returns the angle between the plane and a vector.
-        '''
-        pass
-    
     def getZCoord(self, x, y):
         '''
         Returns a z-coord in the plane, from given x and y
@@ -232,15 +227,19 @@ class Plane():
 
 class Arrow3D(FancyArrowPatch):
     '''
+    This is an outsourced class, stolen from stackoverflow, with my partner in crime bing.com
     '''
+
     def __init__(self, xs, ys, zs, *args, **kwargs):
         '''
+        Initializes the super class, and sets some variables.
         '''
-        FancyArrowPatch.__init__(self, (0,0), (0,0), *args, **kwargs)
+        FancyArrowPatch.__init__(self, (0, 0), (0, 0), *args, **kwargs)
         self._verts3d = xs, ys, zs
 
     def draw(self, renderer):
         '''
+        Creates a way to draw the vector arrow in a matplotlib plot acting as a 3d plot.
         '''
         xs3d, ys3d, zs3d = self._verts3d
         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
@@ -249,15 +248,27 @@ class Arrow3D(FancyArrowPatch):
 
 class Grapher():
     '''
-    Fek me
+    This class draws all the classes from the rumgym library in a plot from matplot lib.
+
+    Variables:
+    fig -- matplotlib.figure()
+    ax -- plot
+
+    Methods:
+    __init__(obj) -- Turns the given object into a plot and adds it to the combined plot
+    show() -- Displays the plots made.
     '''
+
     def __init__(self):
         self.fig = plt.figure()
         self.ax = self.fig.gca(projection='3d')
 
     def add(self, obj):
         '''
-        im not working
+        Turns the given object into a plot and adds it to the combined plot
+
+        parameters:
+        obj -- Vector, Point, Line, or Plane
         '''
         if isinstance(obj, Vector):
             a = Arrow3D([0, obj.x], [0, obj.y], [0, obj.z], mutation_scale=20, arrowstyle="-|>", color="k")
@@ -277,10 +288,9 @@ class Grapher():
             surf = self.ax.plot_surface(x, y, z, linewidth=0, antialiased=False, alpha=0.3)
         else:
             print("You did not give me anything to work with!")
-        plt.autoscale(enable=True, axis='both', tight=False)
 
     def show(self):
         '''
-        Shows the plots made.
+        Displays the plots made.
         '''
         plt.show()
