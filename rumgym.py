@@ -186,10 +186,10 @@ class Plane():
             self.p = p
             self.d1 = d1
             self.d2 = d2
+        elif isinstance(p, Vector) and isinstance(d1, Point) and isinstance(d2, Point):
+            self.vecTwoPoints(p, d1, d2) 
         elif isinstance(p, Point) and isinstance(d1, Point) and isinstance(d2, Point):
             self.threePoints(p, d1, d2)
-        elif isinstance(p, Vector) and isinstance(d1, Point) and isinstance(d2, Point):
-            self.vecTwoPoints(p, d1, d2)   
 
     def normVec(self) -> Vector:
         '''
